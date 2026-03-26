@@ -1,0 +1,22 @@
+.toast {
+  position: fixed;
+  top: 20px;
+  right: -300px;
+  background: #ff87b5;
+  color: white;
+  padding: 14px 22px;
+  border-radius: 10px;
+  font-size: 15px;
+  box-shadow: 0 4px 15px rgba(255, 120, 170, 0.4);
+  transition: 0.4s ease;
+  z-index: 9999;
+}
+
+.toast.show {
+  right: 20px;
+}
+
+.toast p {
+  margin: 0;
+  font-weight: 500;
+}
