@@ -1,11 +1,33 @@
-/* ===== RESET ===== */
+/* ===========================
+   GLOBAL RESET + FONTS
+=========================== */
+
+/* Body default → Poppins */
 body {
- font-family: "Poppins", sans-serif;  margin: 0;
+  margin: 0;
+  font-family: "Gelasio", serif;
   background: #fff5fa;
   color: #444;
 }
 
-/* ===== NAVBAR ===== */
+/* Paragraf → Gelasio (classy, elegant) */
+p {
+  font-family: "Gelasio", serif;
+  line-height: 1.6;
+}
+
+/* Header title → Grey Qo (cute, aesthetic) */
+h1, h2, h3,
+.nav-logo,
+.hero-title {
+  font-family: "Lugrasimo", cursive;
+  letter-spacing: 0.5px;
+}
+
+/* ===========================
+   NAVBAR
+=========================== */
+
 .navbar {
   background: white;
   padding: 15px 30px;
@@ -15,11 +37,11 @@ body {
   align-items: center;
   position: sticky;
   top: 0;
+  z-index: 50;
 }
 
 .nav-logo {
-  font-size: 22px;
-  font-weight: 700;
+  font-size: 28px;
   color: #ff67a3;
 }
 
@@ -34,31 +56,56 @@ body {
   color: #ff67a3;
 }
 
-/* ===== HERO ===== */
-.hero {
+/* ===========================
+   HERO SECTION (NEW)
+=========================== */
+
+.hero-section {
+  position: relative;
+  width: 100%;
+  height: 600px;
+
+  background-image: url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTc30mUIEX3Kn8SP5-JcndQvqCdKunxZZaMtg&s");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: white;
   text-align: center;
-  padding: 80px 20px;
-  background: linear-gradient(135deg, #ffd6e9, #ffeef7);
-  border-bottom-left-radius: 70px;
-  border-bottom-right-radius: 70px;
-  box-shadow: 0 4px 15px rgba(255, 150, 200, 0.3);
 }
 
-.hero h1 {
-  font-size: 42px;
-  color: #ff4f92;
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 105, 180, 0.4);
+  backdrop-filter: blur(2px);
+  z-index: 1;
 }
 
-.hero p {
-  font-size: 18px;
-  margin-top: 10px;
+.hero-content {
+  position: relative;
+  z-index: 10;
+}
+
+.hero-title {
+  font-size: 48px;
+  margin-bottom: 10px;
+}
+
+.hero-subtitle {
+  font-size: 20px;
+  opacity: 0.9;
+  margin-bottom: 20px;
 }
 
 .hero-btn {
-  margin-top: 25px;
-  padding: 12px 30px;
+  padding: 12px 25px;
   border: none;
-  background: #ff85b6;
+  background: #ff5fa2;
   color: white;
   border-radius: 10px;
   font-size: 16px;
@@ -67,10 +114,13 @@ body {
 }
 
 .hero-btn:hover {
-  background: #ff67a3;
+  background: #ff2f8e;
 }
 
-/* ===== OVERVIEW ===== */
+/* ===========================
+   OVERVIEW
+=========================== */
+
 .overview {
   padding: 50px 20px;
   text-align: center;
@@ -79,19 +129,22 @@ body {
 }
 
 .overview h2 {
-  font-size: 28px;
   color: #ff4f92;
+  font-size: 36px;
 }
 
-/* ===== WHY US ===== */
+/* ===========================
+   WHY US
+=========================== */
+
 .why {
   padding: 50px 20px;
   text-align: center;
 }
 
 .why h2 {
-  font-size: 28px;
   color: #ff4f92;
+  font-size: 36px;
 }
 
 .why-grid {
@@ -109,11 +162,13 @@ body {
 }
 
 .why-card h3 {
-  margin: 0 0 10px;
   color: #ff67a3;
 }
 
-/* ===== FAQ ===== */
+/* ===========================
+   FAQ SECTION
+=========================== */
+
 .faq {
   padding: 50px 20px;
   max-width: 800px;
@@ -124,6 +179,7 @@ body {
   text-align: center;
   margin-bottom: 30px;
   color: #ff4f92;
+  font-size: 36px;
 }
 
 .faq-item {
@@ -135,7 +191,7 @@ body {
 }
 
 .faq-question {
-  font-weight: 600;
+  font-weight: 700;
   cursor: pointer;
   color: #ff67a3;
 }
@@ -145,8 +201,10 @@ body {
   color: #555;
 }
 
-/* ===== FOOTER ===== */
-/* ===== FOOTER NEW PINK DESIGN ===== */
+/* ===========================
+   FOOTER
+=========================== */
+
 .footer {
   background: #ffe0ec;
   padding: 40px 20px;
@@ -166,15 +224,12 @@ body {
 }
 
 .footer-section h3 {
-  font-size: 18px;
   color: #ff4f92;
-  margin-bottom: 10px;
 }
 
 .footer-section p {
-  margin: 5px 0;
   color: #555;
-  font-size: 14px;
+  font-family: "Gelasio", serif;
 }
 
 .footer-bottom {
@@ -184,10 +239,21 @@ body {
   font-weight: 600;
 }
 
-/* responsive */
+/* ===========================
+   RESPONSIVE
+=========================== */
+
 @media (max-width: 768px) {
   .footer-container {
     flex-direction: column;
     text-align: center;
+  }
+
+  .hero-title {
+    font-size: 36px;
+  }
+
+  .hero-section {
+    height: 500px;
   }
 }
