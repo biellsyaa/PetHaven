@@ -1,4 +1,5 @@
 import { useState } from "react";
+import "./home.css";
 
 export default function Home() {
   const [openFAQ, setOpenFAQ] = useState(null);
@@ -14,7 +15,7 @@ export default function Home() {
     },
     {
       q: "Bagaimana cara shelter mendaftar?",
-      a: "Shelter bisa membuat akun, mengunggah hewan, dan menunggu persetujuan admin."
+      a: "Shelter bisa membuat akun, kemudian mengunggah hewan, dan menunggu persetujuan admin."
     }
   ];
 
@@ -22,13 +23,22 @@ export default function Home() {
     <div>
 
       {/* HERO SECTION */}
-      <div className="hero">
-        <h1>Temukan Sahabat Baru di PetHaven 💖</h1>
-        <p>Adopsi hewan lucu dengan mudah. Beri rumah penuh cinta untuk mereka!</p>
+      <div className="hero-section">
+        <div className="hero-overlay"></div>
 
-        <a href="/pets">
-          <button className="hero-btn">Mulai Cari Hewan</button>
-        </a>
+        <div className="hero-content">
+          <h1 className="hero-title">Temukan Sahabat Barumu 💗🐶</h1>
+          <p className="hero-subtitle">
+            Ayo adopsi hewan lucu dan selamatkan nyawa hari ini.
+          </p>
+          <p className="hero-subtitle">
+            Connecting Hearts, One Paw at a Time🐾
+          </p>
+
+          <a href="/pets">
+            <button className="hero-btn">Mulai Cari Hewan</button>
+          </a>
+        </div>
       </div>
 
       {/* OVERVIEW SECTION */}
@@ -39,13 +49,19 @@ export default function Home() {
           yang membutuhkan rumah baru. Kami bekerja sama dengan shelter terpercaya
           untuk memastikan adopsi yang aman dan mudah.
         </p>
+        <p>
+          Kami percaya setiap hewan berhak mendapatkan rumah yang penuh kasih. 
+          PetHaven membantu menjembatani shelter dan calon adopter dengan menyediakan 
+          platform yang sederhana, transparan, dan mudah digunakan.
+        </p>
       </section>
 
-      {/* WHY US SECTION */}
+      {/* ✅ WHY US SECTION */}
       <section className="why">
         <h2>Mengapa Memilih Kami?</h2>
 
         <div className="why-grid">
+
           <div className="why-card">
             <h3>🔒 Aman & Terpercaya</h3>
             <p>Shelter diverifikasi oleh admin sebelum tampil ke publik.</p>
@@ -60,18 +76,21 @@ export default function Home() {
             <h3>🐶 Banyak Pilihan</h3>
             <p>Tersedia berbagai hewan lucu yang siap diadopsi.</p>
           </div>
+
         </div>
       </section>
 
-      {/* FAQ SECTION */}
+      {/* ✅ FAQ SECTION */}
       <section className="faq">
         <h2>Pertanyaan Umum (FAQ)</h2>
 
         {faq.map((item, index) => (
           <div key={index} className="faq-item">
-            <div className="faq-question" onClick={() => 
-              setOpenFAQ(openFAQ === index ? null : index)
-            }>
+
+            <div
+              className="faq-question"
+              onClick={() => setOpenFAQ(openFAQ === index ? null : index)}
+            >
               {item.q}
             </div>
 
@@ -82,34 +101,27 @@ export default function Home() {
         ))}
       </section>
 
-      {/* FOOTER */}
+      {/* ✅ FOOTER */}
       <footer className="footer">
-  <div className="footer-container">
+        <div className="footer-container">
 
-    <div className="footer-section">
-      <h3>Alamat</h3>
-      <p>Jl. Mawar Indah No. 27<br />Pamulang, Tangerang Selatan</p>
-    </div>
+          <div className="footer-section">
+            <h3>Contact Us</h3>
+            <p>Email: helo.pethaven@gmail.com</p>
+            <p>WhatsApp: 0812-3456-7890</p>
+          </div>
 
-    <div className="footer-section">
-      <h3>Contact Us</h3>
-      <p>Email: support@pethaven.com</p>
-      <p>WhatsApp: 0812-3456-7890</p>
-    </div>
+          <div className="footer-section">
+            <h3>Stay Connected</h3>
+            <p>Instagram @pethaven</p>
+            <p>TikTok @pethaven.id</p>
+          </div>
 
-    <div className="footer-section">
-      <h3>Operational Hours</h3>
-      <p>Senin – Jumat: 09.00 - 17.00</p>
-      <p>Sabtu: 10.00 - 15.00</p>
-      <p>Minggu: Libur</p>
-    </div>
+        </div>
 
-  </div>
-
-  <p className="footer-bottom">© 2026 PetHaven • Adopsi dengan Cinta 💗</p>
-</footer>
+        <p className="footer-bottom">© 2026 PetHaven • Smart Way to Adopt, Simple Way to Love 💗</p>
+      </footer>
 
     </div>
   );
 }
-``
