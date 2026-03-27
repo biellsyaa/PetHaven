@@ -7,6 +7,7 @@ export default function LoginShelter() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [toast, setToast] = useState(false);
+  const [toastMessage, setToastMessage] = useState("");
 
   async function login(e) {
     e.preventDefault();
@@ -19,24 +20,27 @@ export default function LoginShelter() {
       .single();
 
     if (error || !data) {
+      setToastMessage("Email atau password salah!");
       setToast(true);
       setTimeout(() => setToast(false), 2000);
       return;
     }
 
-    // ✅ login sukses
+    // ✅ Login sukses
     localStorage.setItem("shelter_id", data.id_shelter);
 
+    setToastMessage("Login berhasil!");
     setToast(true);
+
     setTimeout(() => {
       setToast(false);
-      window.location.href = "/shelter/dashboard"; 
+      window.location.href = "/shelter/dashboard";
     }, 2000);
   }
 
   return (
     <div className="login-wrapper">
-      <Toast message="Email atau password salah!" show={toast} />
+      <Toast message={toastMessage} show={toast} />
 
       <div className="login-left">
         <h2>Login</h2>
@@ -45,7 +49,7 @@ export default function LoginShelter() {
         <form onSubmit={login} className="login-form">
           <div className="input-group">
             <span className="icon">📧</span>
-            <input 
+            <input
               placeholder="Email"
               onChange={(e) => setEmail(e.target.value)}
             />
@@ -53,7 +57,7 @@ export default function LoginShelter() {
 
           <div className="input-group">
             <span className="icon">🔑</span>
-            <input 
+            <input
               type="password"
               placeholder="Password"
               onChange={(e) => setPassword(e.target.value)}
@@ -71,8 +75,8 @@ export default function LoginShelter() {
 
       <div className="login-right">
         <div className="login-image-card">
-          <img 
-            src="https://images.unsplash.com/photo-1517849845537-4d257902454a" 
+          <img
+            src="https://images.unsplash.com/photo-1517849845537-4d257902454a"
             alt="Pet"
           />
         </div>

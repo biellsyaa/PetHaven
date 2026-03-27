@@ -60,6 +60,7 @@
   background: transparent;
   flex: 1;
   font-size: 15px;
+  font-family: "Gelasio", serif;
 }
 
 /* ===== BUTTON ===== */
@@ -70,6 +71,7 @@
   border-radius: 10px;
   color: white;
   font-size: 16px;
+  font-family: "Gelasio", serif;
   margin-top: 10px;
   cursor: pointer;
   transition: 0.2s ease;
