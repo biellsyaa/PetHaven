@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { supabase } from "../../services/supabase";
 import { Link } from "react-router-dom";
+import "../shelter/dashboardshelter.css"; // tambahin CSS baru ya beb
 
 export default function DashboardShelter() {
   const [pets, setPets] = useState([]);
@@ -21,7 +22,7 @@ export default function DashboardShelter() {
       .select("*")
       .eq("id_shelter", shelterId);
 
-    setPets(data);
+    setPets(data || []);
   }
 
   function logout() {
@@ -30,32 +31,67 @@ export default function DashboardShelter() {
   }
 
   return (
-    <div>
-      <h1>Dashboard Shelter</h1>
-      <p>Data hewan milikmu:</p>
+    <div className="shelter-dashboard">
 
-      <Link to="/shelter/add-pet">
-        <button style={{ marginBottom: "20px", padding: "10px 20px" }}>
-          + Tambah Hewan
-        </button>
-      </Link>
+      {/* ✅ SIDEBAR */}
+      <aside className="sidebar">
+        <div className="sidebar-logo">🐾</div>
 
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "20px" }}>
-        {pets.map((p) => (
-          <div key={p.id_pet} className="card">
-            <img src={p.foto_url} style={{ width: "100%" }} />
-            <h3>{p.nama_hewan}</h3>
-            <p>Status: {p.status_approval}</p>
-          </div>
-        ))}
-      </div>
+        <nav className="sidebar-menu">         
+          <Link to="/" className="menu-item">
+            <span className="icon">🏠</span>
+            <span className="label">Home</span>
+          </Link>
 
-      <button
-        style={{ marginTop: "30px", padding: "10px 20px", background: "crimson", color: "white" }}
-        onClick={logout}
-      >
-        Logout
-      </button>
+          <Link to="/shelter/profile" className="menu-item">
+            <span className="icon">👤</span>
+            <span className="label">Profile</span>
+          </Link>
+
+          <Link to="/shelter/add-pet" className="menu-item">
+            <span className="icon">➕</span>
+            <span className="label">Add Pet</span>
+          </Link>
+
+          <button onClick={logout} className="menu-item logout-btn">
+            <span className="icon">🚪</span>
+            <span className="label">Logout</span>
+          </button>
+        </nav>
+      </aside>
+
+      {/* ✅ MAIN CONTENT */}
+      <main className="dashboard-content">
+
+        <h1 className="dashboard-title">My Pets</h1>
+        <p className="subtitle">Kelola hewan shelter kamu dengan mudah 💗</p>
+
+        <Link to="/shelter/add-pet">
+          <button className="add-pet-btn">+ Tambah Hewan</button>
+        </Link>
+
+        {/* ✅ PETS GRID */}
+        <div className="pets-grid">
+          {pets.map((p) => (
+            <div className="pet-card" key={p.id_pet}>
+              <img src={p.foto_url} alt={p.nama_hewan} />
+
+              <div className="pet-info">
+                <h3>{p.nama_hewan}</h3>
+                <span className={`status ${p.status_approval}`}>
+                  {p.status_approval}
+                </span>
+              </div>
+            </div>
+          ))}
+
+          {pets.length === 0 && (
+            <p className="no-pets">Belum ada hewan. Tambahkan hewan pertama kamu 💗</p>
+          )}
+        </div>
+
+      </main>
+
     </div>
   );
 }
