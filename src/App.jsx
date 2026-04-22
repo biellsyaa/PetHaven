@@ -11,6 +11,7 @@ import LoginShelter from "./pages/shelter/LoginShelter";
 import RegisterShelter from "./pages/shelter/RegisterShelter";
 import DashboardShelter from "./pages/shelter/DashboardShelter";
 import AddPet from "./pages/shelter/AddPet";
+import ShelterProfile from "./pages/shelter/ShelterProfile";
 
 import LoginAdmin from "./pages/admin/LoginAdmin";
 import DashboardAdmin from "./pages/admin/DashboardAdmin";
@@ -48,6 +49,14 @@ export default function App() {
                 <AddPet />
               </ProtectedRoute>
             }
+          />
+          <Route
+            path="/shelter/profile"
+            element={
+              <ProtectedRoute role="shelter">
+                <ShelterProfile />
+              </ProtectedRoute>
+          }
           />
 
           {/* ADMIN AUTH */}

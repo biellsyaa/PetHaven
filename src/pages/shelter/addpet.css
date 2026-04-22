@@ -1,0 +1,149 @@
+/* ===== PAGE WRAPPER ===== */
+.addpet-wrapper {
+  background: #fff5fa;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  padding-top: 40px;
+  font-family: "Poppins", sans-serif;
+}
+
+/* ===== CARD ===== */
+.addpet-card {
+  width: 70%;
+  background: white;
+  padding: 35px;
+  border-radius: 14px;
+  box-shadow: 0 4px 16px rgba(255, 100, 150, 0.2);
+  border: 2px solid #ffe1ea;
+}
+
+/* ===== TITLE ===== */
+.title {
+  font-family: "Alex Brush";
+  font-size: 48px;
+  text-align: center;
+  margin-bottom: 30px;
+  color: #ff5f9e;
+}
+
+/* ===== FORM GRID ===== */
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 15px;
+}
+
+/* ===== INPUT / TEXTAREA ===== */
+form input,
+textarea {
+  width: 100%;
+  padding: 12px 15px;
+  border-radius: 10px;
+  border: 1.8px solid #ffc8de;
+  background: #fffafd;
+  font-size: 14px;
+  outline: none;
+  transition: 0.2s;
+  font-family: "Gelasio", serif;
+}
+
+form input:focus,
+textarea:focus {
+  border-color: #ff6fa7;
+  background: #fff2f7;
+}
+
+.textarea {
+  grid-column: span 2;
+  min-height: 130px;
+  resize: vertical;
+}
+
+/* ===== AGE ===== */
+.age-group {
+  display: flex;
+  gap: 10px;
+}
+
+.age-input,
+.age-unit {
+  width: 100%;
+  padding: 12px 15px;
+  border-radius: 10px;
+  border: 1.8px solid #ffc8de;
+  background: #fffafd;
+  outline: none;
+  font-family: "Gelasio", serif;
+}
+
+.age-input:focus,
+.age-unit:focus {
+  border-color: #ff6fa7;
+  background: #fff2f7;
+}
+
+.age-unit {
+  cursor: pointer;
+}
+
+/* ===== FILE UPLOAD ===== */
+.file-upload-wrapper {
+  grid-column: span 2;
+  background: #fffafd;
+  border: 1.8px solid #ffc8de;
+  border-radius: 10px;
+  padding: 12px 15px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  transition: 0.2s;
+  font-family: "Gelasio", serif;
+  position: relative;
+}
+
+.file-upload-label {
+  color: #ff5f9e;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.file-upload-input {
+  position: absolute;
+  opacity: 0;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+  left: 0;
+}
+
+.file-upload-name {
+  font-size: 13px;
+  color: #444;
+  font-family: "Poppins", sans-serif;
+}
+
+.file-upload-wrapper:hover {
+  background: #fff2f7;
+  border-color: #ff6fa7;
+}
+
+/* ===== BUTTON ===== */
+.save-btn {
+  grid-column: span 2;
+  padding: 12px;
+  border: none;
+  background: #ff67a3;
+  color: white;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 16px;
+  margin-top: 10px;
+  transition: 0.2s;
+  font-family: "Gelasio", serif;
+}
+
+.save-btn:hover {
+  background: #ff3f8e;
+}

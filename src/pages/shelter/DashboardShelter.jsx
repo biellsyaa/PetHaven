@@ -66,10 +66,6 @@ export default function DashboardShelter() {
         <h1 className="dashboard-title">My Pets</h1>
         <p className="subtitle">Kelola hewan shelter kamu dengan mudah 💗</p>
 
-        <Link to="/shelter/add-pet">
-          <button className="add-pet-btn">+ Tambah Hewan</button>
-        </Link>
-
         {/* ✅ PETS GRID */}
         <div className="pets-grid">
           {pets.map((p) => (
