@@ -11,6 +11,7 @@ import LoginShelter from "./pages/shelter/LoginShelter";
 import RegisterShelter from "./pages/shelter/RegisterShelter";
 import DashboardShelter from "./pages/shelter/DashboardShelter";
 import AddPet from "./pages/shelter/AddPet";
+import EditPet from "./pages/shelter/EditPet"; // ✅ TAMBAH INI
 import ShelterProfile from "./pages/shelter/ShelterProfile";
 
 import LoginAdmin from "./pages/admin/LoginAdmin";
@@ -33,7 +34,7 @@ export default function App() {
           <Route path="/shelter/login" element={<LoginShelter />} />
           <Route path="/shelter/register" element={<RegisterShelter />} />
 
-          {/* SHELTER PROTECTED ROUTES */}
+          {/* SHELTER PROTECTED */}
           <Route
             path="/shelter/dashboard"
             element={
@@ -50,19 +51,28 @@ export default function App() {
               </ProtectedRoute>
             }
           />
+          {/* ✅ EDIT PET ROUTE */}
+          <Route
+            path="/shelter/edit-pet/:id"
+            element={
+              <ProtectedRoute role="shelter">
+                <EditPet />
+              </ProtectedRoute>
+            }
+          />
           <Route
             path="/shelter/profile"
             element={
               <ProtectedRoute role="shelter">
                 <ShelterProfile />
               </ProtectedRoute>
-          }
+            }
           />
 
           {/* ADMIN AUTH */}
           <Route path="/admin/login" element={<LoginAdmin />} />
 
-          {/* ADMIN PROTECTED ROUTES */}
+          {/* ADMIN PROTECTED */}
           <Route
             path="/admin/dashboard"
             element={

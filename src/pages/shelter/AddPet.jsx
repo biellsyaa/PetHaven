@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { supabase } from "../../services/supabase";
+import Toast from "../../components/Toast";
 import "./addpet.css";
 
 export default function AddPet() {
@@ -7,14 +8,22 @@ export default function AddPet() {
   const [jenis, setJenis] = useState("");
   const [jenisKelamin, setJenisKelamin] = useState("");
   const [deskripsi, setDeskripsi] = useState("");
-
   const [umur, setUmur] = useState("");
   const [umurUnit, setUmurUnit] = useState("bulan");
-
-  const [harga, setHarga] = useState(""); 
-  const [hargaDisplay, setHargaDisplay] = useState(""); 
-
+  const [harga, setHarga] = useState("");
+  const [hargaDisplay, setHargaDisplay] = useState("");
   const [file, setFile] = useState(null);
+  const [loading, setLoading] = useState(false);
+
+  // ✅ TOAST STATE
+  const [toast, setToast] = useState(false);
+  const [toastMessage, setToastMessage] = useState("");
+
+  function showToast(message) {
+    setToastMessage(message);
+    setToast(true);
+    setTimeout(() => setToast(false), 2000);
+  }
 
   function formatRupiah(value) {
     if (!value) return "";
@@ -28,16 +37,18 @@ export default function AddPet() {
   }
 
   async function uploadFile() {
-    if (!file) return null;
+    if (!file) {
+      showToast("📷 Foto hewan belum dipilih");
+      return null;
+    }
 
     const fileName = `${Date.now()}-${file.name}`;
-    const { data, error } = await supabase.storage
+    const { error } = await supabase.storage
       .from("pet-images")
       .upload(fileName, file);
 
     if (error) {
-      console.error("UPLOAD ERROR:", error);
-      alert("Upload gambar gagal: " + error.message);
+      showToast("❌ Upload foto gagal");
       return null;
     }
 
@@ -49,70 +60,96 @@ export default function AddPet() {
   async function save(e) {
     e.preventDefault();
 
+    // ✅ VALIDASI FORM
+    if (!nama || !jenis || !umur || !harga || !deskripsi) {
+      showToast("⚠️ Lengkapi semua data yaa");
+      return;
+    }
+
+    setLoading(true);
+
     const foto = await uploadFile();
-    if (!foto) return;
+    if (!foto) {
+      setLoading(false);
+      return;
+    }
 
-    // ✅ FIX PENTING: convert ke integer
-    const idShelter = parseInt(localStorage.getItem("shelter_id"), 10);
+    const shelterId = localStorage.getItem("shelter_id");
+    if (!shelterId) {
+      showToast("❌ Shelter belum login");
+      setLoading(false);
+      return;
+    }
 
-    const { data, error } = await supabase.from("pets").insert({
+    const { error } = await supabase.from("pets").insert({
       nama_hewan: nama,
       jenis,
       jenis_kelamin: jenisKelamin,
-      umur: parseInt(umur),
+      umur: Number(umur),
       umur_unit: umurUnit,
       deskripsi,
       harga,
       foto_url: foto,
       status_approval: "pending",
-      id_shelter: idShelter, // ✅ SUDAH FIX 
+      id_shelter: shelterId,
     });
 
     if (error) {
-      console.error("INSERT ERROR:", error);
-      alert("Gagal menyimpan ke database: " + error.message);
+      showToast("❌ Gagal menyimpan data");
+      setLoading(false);
       return;
     }
 
-    console.log("INSERT SUCCESS:", data);
-    alert("Hewan berhasil ditambahkan!");
+    showToast("✅ Hewan berhasil ditambahkan!");
+    setTimeout(() => {
+      window.location.href = "/shelter/dashboard";
+    }, 2000);
   }
 
   return (
     <div className="addpet-wrapper">
-      <div className="addpet-card">
+      {/* ✅ TOAST */}
+      <Toast message={toastMessage} show={toast} />
 
+      <div className="addpet-card">
         <h1 className="title">Tambah Hewan</h1>
 
         <form onSubmit={save} className="form-grid">
-
           <input placeholder="Nama hewan" onChange={(e) => setNama(e.target.value)} />
           <input placeholder="Jenis / Breed" onChange={(e) => setJenis(e.target.value)} />
 
           <div className="age-group">
             <input
-              type="text"
               className="age-input"
               placeholder="Umur"
               onChange={(e) => setUmur(e.target.value)}
             />
 
-            <select className="age-unit" onChange={(e) => setUmurUnit(e.target.value)}>
+            <select
+              className="age-unit"
+              onChange={(e) => setUmurUnit(e.target.value)}
+            >
               <option value="bulan">Bulan</option>
               <option value="tahun">Tahun</option>
             </select>
           </div>
 
           <input
-            type="text"
-            placeholder="Harga (contoh: 100000)"
-            value={hargaDisplay}
-            onChange={handleHargaChange}
-            className="price-input"
+            placeholder="Jenis Kelamin"
+            onChange={(e) => setJenisKelamin(e.target.value)}
           />
 
+          <input
+            placeholder="Harga"
+            value={hargaDisplay}
+            onChange={handleHargaChange}
+          />
+
+          {/* ✅ FILE UPLOAD */}
           <label className="file-upload-wrapper">
-            <span className="file-upload-label">📸 Upload Foto Hewan</span>
+            <span className="file-upload-label">
+              📸 {file ? "Ganti Foto Hewan" : "Upload Foto Hewan"}
+            </span>
 
             <input
               type="file"
@@ -129,9 +166,11 @@ export default function AddPet() {
             placeholder="Deskripsi"
             className="textarea"
             onChange={(e) => setDeskripsi(e.target.value)}
-          ></textarea>
+          />
 
-          <button className="save-btn">Simpan</button>
+          <button type="submit" className="save-btn" disabled={loading}>
+            {loading ? "Menyimpan..." : "Simpan"}
+          </button>
         </form>
       </div>
     </div>
