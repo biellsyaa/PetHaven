@@ -88,12 +88,13 @@ export default function DashboardShelter() {
                 )}
 
                 {/* ✅ EDIT BUTTON (ONLY PENDING) */}
-                {p.status_approval === "pending" && (
+                {(p.status_approval === "pending" ||
+                   p.status_approval === "rejected") && (
                   <button
-                    className="edit-btn"
-                    onClick={() => navigate(`/shelter/edit-pet/${p.id_pet}`)}
+                     className="edit-btn"
+                     onClick={() => navigate(`/shelter/edit-pet/${p.id_pet}`)}
                   >
-                    ✏️ Edit
+                  ✏️ Edit
                   </button>
                 )}
               </div>

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { supabase } from "../../services/supabase";
 import { useNavigate, useParams } from "react-router-dom";
 import Toast from "../../components/Toast";
-import "../shelter/addpet.css"; // REUSE CSS AddPet 💗
+import "../shelter/addpet.css"; // reuse CSS AddPet
 
 export default function EditPet() {
   const { id } = useParams(); // id_pet
@@ -49,8 +49,11 @@ export default function EditPet() {
       return;
     }
 
-    // ❌ Kalau sudah approved → TIDAK BOLEH EDIT
-    if (data.status_approval !== "pending") {
+    // ✅ BOLEH EDIT: pending & rejected
+    if (
+      data.status_approval !== "pending" &&
+      data.status_approval !== "rejected"
+    ) {
       showToast("❌ Data sudah tidak bisa diedit");
       navigate("/shelter/dashboard");
       return;
@@ -109,11 +112,11 @@ export default function EditPet() {
         harga,
         deskripsi,
         foto_url: foto,
-        status_approval: "pending", // tetap pending
-        rejection_reason: null,     // reset kalau sebelumnya rejected
+        status_approval: "pending", // 🔄 ajukan ulang
+        rejection_reason: null,     // ✅ reset alasan lama
       })
       .eq("id_pet", id)
-      .eq("status_approval", "pending"); // 🔐 SECURITY
+      .in("status_approval", ["pending", "rejected"]); // ✅ FIX PENTING
 
     if (error) {
       showToast("❌ Gagal memperbarui data");
@@ -137,13 +140,21 @@ export default function EditPet() {
           <input value={nama} onChange={(e) => setNama(e.target.value)} />
           <input value={jenis} onChange={(e) => setJenis(e.target.value)} />
 
-        <div className="age-group">
-            <input className="age-input" value={umur} onChange={(e) => setUmur(e.target.value)} />
-            <select className="age-unit" value={umurUnit} onChange={(e) => setUmurUnit(e.target.value)}>
-                <option value="bulan">Bulan</option>
-                <option value="tahun">Tahun</option>
+          <div className="age-group">
+            <input
+              className="age-input"
+              value={umur}
+              onChange={(e) => setUmur(e.target.value)}
+            />
+            <select
+              className="age-unit"
+              value={umurUnit}
+              onChange={(e) => setUmurUnit(e.target.value)}
+            >
+              <option value="bulan">Bulan</option>
+              <option value="tahun">Tahun</option>
             </select>
-        </div>
+          </div>
 
           <input
             value={jenisKelamin}
