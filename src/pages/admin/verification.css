@@ -1,0 +1,127 @@
+/* ===== PAGE WRAPPER ===== */
+.verification-page {
+  padding: 40px;
+  background: #fff5fa;
+  min-height: 100vh;
+  font-family: "Poppins", sans-serif;
+}
+
+.verification-page h1 {
+  font-family: "Alex Brush";
+  font-size: 42px;
+  margin-bottom: 30px;
+  color: #ff5f9e;
+}
+
+/* ===== CARD ===== */
+.verify-card {
+  background: white;
+  border-radius: 14px;
+  box-shadow: 0 4px 14px rgba(255, 120, 170, 0.2);
+  margin-bottom: 25px;
+  display: flex;
+  overflow: hidden;
+  border: 2px solid #ffe1ea;
+}
+
+/* ===== IMAGE ===== */
+.verify-card img {
+  width: 220px;
+  object-fit: cover;
+}
+
+/* ===== INFO ===== */
+.verify-info {
+  padding: 20px;
+  flex: 1;
+}
+
+.verify-info h3 {
+  margin: 0 0 6px;
+  font-size: 22px;
+  color: #333;
+}
+
+.verify-info p {
+  margin: 4px 0;
+  color: #555;
+  font-size: 14px;
+  font-family: "Gelasio", serif;
+}
+
+/* ===== TEXTAREA (REJECT REASON) ===== */
+.verify-info textarea {
+  width: 100%;
+  margin-top: 10px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1.6px solid #ffc8de;
+  background: #fffafd;
+  font-size: 14px;
+  resize: vertical;
+  font-family: "Gelasio", serif;
+}
+
+.verify-info textarea:focus {
+  outline: none;
+  border-color: #ff6fa7;
+  background: #fff2f7;
+}
+
+/* ===== ACTION BUTTONS ===== */
+.verify-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 15px;
+}
+
+.approve-btn {
+  padding: 8px 18px;
+  border: none;
+  background: #5fcf9b;
+  color: white;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: 0.2s;
+}
+
+.approve-btn:hover {
+  background: #3fbf85;
+}
+
+.reject-btn {
+  padding: 8px 18px;
+  border: none;
+  background: #ff6b6b;
+  color: white;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: 0.2s;
+}
+
+.reject-btn:hover {
+  background: #ff4b4b;
+}
+
+/* ===== EMPTY STATE ===== */
+.verification-page p {
+  font-size: 15px;
+  color: #777;
+}
+
+/* clickable pending row */
+.clickable-row {
+  cursor: pointer;
+}
+
+.clickable-row:hover {
+  background: #fff2f7;
+}
+
+.hint-text {
+  font-size: 14px;
+  color: #777;
+  margin-bottom: 10px;
+}

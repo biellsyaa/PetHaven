@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { supabase } from "../../services/supabase";
+import { useNavigate } from "react-router-dom";
 import "./dashboardadmin.css";
 
 export default function DashboardAdmin() {
@@ -8,6 +9,8 @@ export default function DashboardAdmin() {
   const [approvedPets, setApprovedPets] = useState(0);
   const [sheltersCount, setSheltersCount] = useState(0);
   const [pets, setPets] = useState([]);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     loadStats();
@@ -33,15 +36,19 @@ export default function DashboardAdmin() {
       .from("shelters")
       .select("*", { count: "exact" });
 
-    setTotalPets(allCount);
-    setPendingPets(pendingCount);
-    setApprovedPets(approvedCount);
-    setSheltersCount(shelters);
+    setTotalPets(allCount || 0);
+    setPendingPets(pendingCount || 0);
+    setApprovedPets(approvedCount || 0);
+    setSheltersCount(shelters || 0);
   }
 
   async function loadPets() {
-    const { data } = await supabase.from("pets").select("*");
-    setPets(data);
+    const { data } = await supabase
+      .from("pets")
+      .select("*")
+      .order("request_date", { ascending: false });
+
+    setPets(data || []);
   }
 
   function logout() {
@@ -51,16 +58,16 @@ export default function DashboardAdmin() {
 
   return (
     <div className="admin-dashboard">
-
       {/* HEADER */}
       <div className="admin-header">
         <h1>Admin Dashboard</h1>
-        <button className="logout-btn" onClick={logout}>Logout</button>
+        <button className="logout-btn" onClick={logout}>
+          Logout
+        </button>
       </div>
 
       {/* STAT CARDS */}
       <div className="stats-grid">
-
         <div className="stat-card">
           <h3>Total Hewan</h3>
           <h1>{totalPets}</h1>
@@ -84,12 +91,14 @@ export default function DashboardAdmin() {
           <h1>{sheltersCount}</h1>
           <p>Shelter terdaftar</p>
         </div>
-
       </div>
 
       {/* TABLE */}
       <div className="table-section">
         <h2>Data Hewan</h2>
+        <p className="hint-text">
+          Klik data berstatus <b>pending</b> untuk melakukan verifikasi
+        </p>
 
         <table>
           <thead>
@@ -102,20 +111,35 @@ export default function DashboardAdmin() {
           </thead>
 
           <tbody>
-            {pets?.map((p) => (
-              <tr key={p.id_pet}>
+            {pets.map((p) => (
+              <tr
+                key={p.id_pet}
+                className={
+                  p.status_approval === "pending"
+                    ? "clickable-row"
+                    : ""
+                }
+                onClick={() => {
+                  if (p.status_approval === "pending") {
+                    navigate("/admin/verification");
+                  }
+                }}
+              >
                 <td>{p.nama_hewan}</td>
-                <td className={`status ${p.status_approval}`}>
-                  {p.status_approval}
+                <td>
+                  <span className={`status ${p.status_approval}`}>
+                    {p.status_approval}
+                  </span>
                 </td>
                 <td>{p.jenis}</td>
-                <td>{p.umur} Tahun</td>
+                <td>
+                  {p.umur} {p.umur_unit}
+                </td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
-
     </div>
   );
 }
