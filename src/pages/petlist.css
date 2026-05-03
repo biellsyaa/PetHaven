@@ -1,0 +1,80 @@
+.petlist-page {
+  padding: 40px;
+  background: #fff5fa;
+  min-height: 100vh;
+  font-family: "Poppins", sans-serif;
+}
+
+.petlist-title {
+  font-family: "Alex Brush";
+  font-size: 46px;
+  color: #ff5f9e;
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.petlist-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 25px;
+}
+
+.pet-card-public {
+  background: white;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 6px 18px rgba(255, 120, 170, 0.25);
+  transition: 0.25s;
+}
+
+.pet-card-public:hover {
+  transform: translateY(-6px);
+}
+
+.pet-card-public img {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+}
+
+.pet-card-info {
+  padding: 15px;
+  text-align: center;
+}
+
+.pet-card-info h3 {
+  margin: 8px 0 4px;
+  font-size: 22px;
+  font-family: "Gelasio", serif;
+  color: #333;
+}
+
+.pet-card-info p {
+  margin: 2px 0;
+  font-size: 14px;
+  color: #666;
+}
+
+.detail-btn {
+  display: inline-block;
+  margin-top: 12px;
+  padding: 8px 18px;
+  background: #ff67a3;
+  color: white;
+  border-radius: 20px;
+  text-decoration: none;
+  font-size: 14px;
+  font-family: "Gelasio", serif;
+  transition: 0.2s;
+}
+
+.detail-btn:hover {
+  background: #ff3f8e;
+}
+
+.empty-text {
+  grid-column: span 3;
+  text-align: center;
+  font-size: 16px;
+  color: #777;
+}
