@@ -1,51 +1,116 @@
 import { useEffect, useState } from "react";
 import { supabase } from "../../services/supabase";
+import Toast from "../../components/Toast";
+import "./verification.css";
 
 export default function Verification() {
-  const [pending, setPending] = useState([]);
+  const [pets, setPets] = useState([]);
+  const [toast, setToast] = useState(false);
+  const [toastMessage, setToastMessage] = useState("");
+  const [rejectReason, setRejectReason] = useState("");
+
+  function showToast(msg) {
+    setToastMessage(msg);
+    setToast(true);
+    setTimeout(() => setToast(false), 2000);
+  }
 
   useEffect(() => {
-    load();
+    loadPets();
   }, []);
 
-  async function load() {
-    const { data } = await supabase
+  async function loadPets() {
+    const { data, error } = await supabase
       .from("pets")
       .select("*")
-      .eq("status_approval", "pending");
+      .eq("status_approval", "pending")
+      .order("request_date", { ascending: true });
 
-    setPending(data);
+    if (!error) setPets(data || []);
   }
 
-  async function approve(id) {
-    await supabase.from("pets").update({ status_approval: "approved" }).eq("id_pet", id);
-    load();
+  async function approvePet(id) {
+    const { error } = await supabase
+      .from("pets")
+      .update({
+        status_approval: "approved",
+        rejection_reason: null,
+      })
+      .eq("id_pet", id);
+
+    if (error) {
+      showToast("❌ Gagal approve");
+      return;
+    }
+
+    showToast("✅ Hewan berhasil di-approve");
+    loadPets();
   }
 
-  async function reject(id) {
-    await supabase.from("pets").update({ status_approval: "rejected" }).eq("id_pet", id);
-    load();
+  async function rejectPet(id) {
+    if (!rejectReason) {
+      showToast("⚠️ Alasan wajib diisi");
+      return;
+    }
+
+    const { error } = await supabase
+      .from("pets")
+      .update({
+        status_approval: "rejected",
+        rejection_reason: rejectReason,
+      })
+      .eq("id_pet", id);
+
+    if (error) {
+      showToast("❌ Gagal reject");
+      return;
+    }
+
+    showToast("❌ Hewan ditolak");
+    setRejectReason("");
+    loadPets();
   }
 
   return (
-    <div>
-      <h2>Verifikasi Hewan</h2>
+    <div className="verification-page">
+      <Toast message={toastMessage} show={toast} />
+      <h1>Verifikasi Hewan</h1>
 
-      {pending.map((p) => (
-        <div key={p.id_pet} className="card" style={{ marginBottom: "15px" }}>
-          <h3>{p.nama_hewan}</h3>
-          <p>{p.deskripsi}</p>
+      {pets.length === 0 && <p>Tidak ada pengajuan baru</p>}
 
-          <button onClick={() => approve(p.id_pet)}
-            style={{ marginRight: "10px", padding: "5px 12px" }}>
-            Approve
-          </button>
+      {pets.map((p) => (
+  <div key={p.id_pet} className="verify-card">
+    {/* ✅ FOTO */}
+    <img src={p.foto_url} alt={p.nama_hewan} />
 
-          <button onClick={() => reject(p.id_pet)} style={{ padding: "5px 12px" }}>
-            Reject
-          </button>
-        </div>
-      ))}
+    <div className="verify-info">
+      <h3>{p.nama_hewan}</h3>
+      <p>{p.jenis}</p>
+      <p>{p.deskripsi}</p>
+
+      <textarea
+        placeholder="Alasan penolakan (jika reject)"
+        value={rejectReason}
+        onChange={(e) => setRejectReason(e.target.value)}
+      />
+
+      <div className="verify-actions">
+        <button
+          className="approve-btn"
+          onClick={() => approvePet(p.id_pet)}
+        >
+          ✅ Approve
+        </button>
+        <button
+          className="reject-btn"
+          onClick={() => rejectPet(p.id_pet)}
+        >
+          ❌ Reject
+        </button>
+      </div>
+    </div>
+  </div>
+))}
     </div>
   );
 }
