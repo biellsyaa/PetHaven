@@ -1,42 +1,98 @@
-import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { supabase } from "../services/supabase";
+import { useParams, Link } from "react-router-dom";
+import "./petdetail.css";
 
 export default function PetDetail() {
   const { id } = useParams();
   const [pet, setPet] = useState(null);
+  const [shelterPhone, setShelterPhone] = useState("");
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    loadDetail();
+    loadPet();
   }, []);
 
-  async function loadDetail() {
-    const { data } = await supabase
+  async function loadPet() {
+    // ✅ 1. Ambil data PET (approved saja)
+    const { data: petData, error: petError } = await supabase
       .from("pets")
-      .select("*, shelters(no_whatsapp)")
+      .select("*")
       .eq("id_pet", id)
+      .eq("status_approval", "approved")
       .single();
 
-    setPet(data);
+    if (petError || !petData) {
+      console.error("PET ERROR:", petError);
+      setLoading(false);
+      return;
+    }
+
+    setPet(petData);
+
+    // ✅ 2. Ambil nomor WhatsApp dari SHELTER (FIX DI SINI 🔥)
+    const { data: shelterData, error: shelterError } = await supabase
+      .from("shelters")
+      .select("no_whatsapp")
+      .eq("id_shelter", petData.id_shelter) // ✅ FIX FINAL
+      .single();
+
+    if (!shelterError && shelterData?.no_whatsapp) {
+      setShelterPhone(shelterData.no_whatsapp);
+    }
+
+    setLoading(false);
   }
 
-  if (!pet) return <p>Loading...</p>;
+  // ✅ FORMAT NOMOR WA (08 → 62)
+  function formatWhatsapp(phone) {
+    if (!phone) return "";
+
+    let clean = phone.replace(/\D/g, "");
+
+    if (clean.startsWith("08")) {
+      return "62" + clean.slice(1);
+    }
+
+    if (clean.startsWith("62")) {
+      return clean;
+    }
+
+    return clean;
+  }
+
+  if (loading) return <p style={{ padding: 40 }}>Loading...</p>;
+  if (!pet) return <p style={{ padding: 40 }}>Data tidak ditemukan</p>;
 
   return (
-    <div>
-      <img src={pet.foto_url} style={{ width: "300px", borderRadius: "10px" }} />
-      <h1>{pet.nama_hewan}</h1>
-      <p>{pet.deskripsi}</p>
+    <div className="petdetail-page">
+      <div className="petdetail-card">
+        <img src={pet.foto_url} alt={pet.nama_hewan} />
 
-      <a
-        href={`https://wa.me/${pet.shelters.no_whatsapp}?text=Saya tertarik mengadopsi ${pet.nama_hewan}`}
-        target="_blank"
-      >
-        <button style={{ padding: "10px 20px", background: "#25D366", border: "none", color: "white", borderRadius: "5px" }}>
-          Chat via WhatsApp
-        </button>
-      </a>
+        <div className="petdetail-info">
+          <h1>{pet.nama_hewan}</h1>
+          <p><b>Jenis:</b> {pet.jenis}</p>
+          <p><b>Umur:</b> {pet.umur} {pet.umur_unit}</p>
+
+          <p className="desc">{pet.deskripsi}</p>
+
+          {/* ✅ TOMBOL WHATSAPP (PASTI MUNCUL SEKARANG) */}
+          {shelterPhone && (
+            <a
+              href={`https://wa.me/${formatWhatsapp(shelterPhone)}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="wa-btn"
+            >
+              💬 Hubungi Shelter via WhatsApp
+            </a>
+          )}
+
+          <Link to="/pets" className="back-btn">
+            ← Kembali ke daftar
+          </Link>
+        </div>
+      </div>
     </div>
   );
 }
-``

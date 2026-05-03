@@ -1,0 +1,84 @@
+.petdetail-page {
+  min-height: 100vh;
+  padding: 50px;
+  background: #fff5fa;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: "Poppins", sans-serif;
+}
+
+.petdetail-card {
+  background: white;
+  max-width: 900px;
+  width: 100%;
+  display: flex;
+  gap: 30px;
+  border-radius: 20px;
+  box-shadow: 0 6px 20px rgba(255, 120, 170, 0.25);
+  padding: 30px;
+}
+
+.petdetail-card img {
+  width: 380px;
+  height: 380px;
+  object-fit: cover;
+  border-radius: 16px;
+}
+
+.petdetail-info {
+  flex: 1;
+}
+
+.petdetail-info h1 {
+  font-family: "Alex Brush";
+  font-size: 48px;
+  margin-bottom: 10px;
+  color: #ff5f9e;
+}
+
+.petdetail-info p {
+  font-size: 15px;
+  margin: 6px 0;
+  color: #555;
+}
+
+.petdetail-info .desc {
+  margin-top: 15px;
+  line-height: 1.6;
+  font-family: "Gelasio", serif;
+}
+
+.back-btn {
+  display: inline-block;
+  margin-top: 20px;
+  padding: 10px 22px;
+  background: #ff67a3;
+  color: white;
+  border-radius: 20px;
+  text-decoration: none;
+  font-size: 14px;
+  font-family: "Gelasio", serif;
+  transition: 0.2s;
+}
+
+.back-btn:hover {
+  background: #ff3f8e;
+}
+
+.wa-btn {
+  display: inline-block;
+  margin-top: 15px;
+  padding: 12px 22px;
+  background: #25d366;
+  color: white;
+  border-radius: 30px;
+  text-decoration: none;
+  font-size: 15px;
+  font-family: "Gelasio", serif;
+  transition: 0.2s;
+}
+
+.wa-btn:hover {
+  background: #1ebe5d;
+}
