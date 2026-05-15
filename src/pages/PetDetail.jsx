@@ -14,7 +14,7 @@ export default function PetDetail() {
   }, []);
 
   async function loadPet() {
-    // ✅ 1. Ambil data PET (approved saja)
+    // ✅ Ambil data PET
     const { data: petData, error: petError } = await supabase
       .from("pets")
       .select("*")
@@ -30,11 +30,11 @@ export default function PetDetail() {
 
     setPet(petData);
 
-    // ✅ 2. Ambil nomor WhatsApp dari SHELTER (FIX DI SINI 🔥)
+    // ✅ Ambil nomor WhatsApp shelter
     const { data: shelterData, error: shelterError } = await supabase
       .from("shelters")
       .select("no_whatsapp")
-      .eq("id_shelter", petData.id_shelter) // ✅ FIX FINAL
+      .eq("id_shelter", petData.id_shelter)
       .single();
 
     if (!shelterError && shelterData?.no_whatsapp) {
@@ -44,7 +44,7 @@ export default function PetDetail() {
     setLoading(false);
   }
 
-  // ✅ FORMAT NOMOR WA (08 → 62)
+  // ✅ FORMAT NOMOR WA
   function formatWhatsapp(phone) {
     if (!phone) return "";
 
@@ -61,6 +61,13 @@ export default function PetDetail() {
     return clean;
   }
 
+  // ✅ FORMAT HARGA
+  function formatRupiah(value) {
+    if (!value) return "Rp 0";
+
+    return `Rp ${Number(value).toLocaleString("id-ID")}`;
+  }
+
   if (loading) return <p style={{ padding: 40 }}>Loading...</p>;
   if (!pet) return <p style={{ padding: 40 }}>Data tidak ditemukan</p>;
 
@@ -71,12 +78,26 @@ export default function PetDetail() {
 
         <div className="petdetail-info">
           <h1>{pet.nama_hewan}</h1>
-          <p><b>Jenis:</b> {pet.jenis}</p>
-          <p><b>Umur:</b> {pet.umur} {pet.umur_unit}</p>
+
+          <p>
+            <b>Jenis:</b> {pet.jenis}
+          </p>
+
+          <p>
+            <b>Jenis Kelamin:</b> {pet.jenis_kelamin}
+          </p>
+
+          <p>
+            <b>Umur:</b> {pet.umur} {pet.umur_unit}
+          </p>
+
+          <p>
+            <b>Harga:</b> {formatRupiah(pet.harga)}
+          </p>
 
           <p className="desc">{pet.deskripsi}</p>
 
-          {/* ✅ TOMBOL WHATSAPP (PASTI MUNCUL SEKARANG) */}
+          {/* ✅ Tombol WhatsApp */}
           {shelterPhone && (
             <a
               href={`https://wa.me/${formatWhatsapp(shelterPhone)}`}

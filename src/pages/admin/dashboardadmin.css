@@ -18,18 +18,44 @@
   color: #ff4f92;
 }
 
+/* ===== LOGOUT BUTTON ===== */
 .logout-btn {
-  background: #ff67a3;
   border: none;
-  padding: 10px 18px;
+  outline: none;
+
+  background: linear-gradient(
+    135deg,
+    #ff8fbc,
+    #ff6fa7
+  );
+
   color: white;
-  border-radius: 10px;
+
+  padding: 10px 18px;
+
+  border-radius: 999px;
+
+  font-family: "Gelasio", serif;
+  font-size: 14px;
+  font-weight: 600;
+
   cursor: pointer;
-  transition: 0.2s;
+
+  transition: all 0.25s ease;
+
+  box-shadow: 0 4px 12px rgba(255, 111, 167, 0.25);
 }
 
 .logout-btn:hover {
-  background: #ff4f92;
+  transform: translateY(-1px);
+
+  background: linear-gradient(
+    135deg,
+    #ff7ab1,
+    #ff4f95
+  );
+
+  box-shadow: 0 6px 16px rgba(255, 111, 167, 0.35);
 }
 
 /* ===== STAT CARDS ===== */
@@ -63,44 +89,70 @@
   margin: 0;
 }
 
-/* ===== TABLE ===== */
+/* ===== TABLE SECTION ===== */
 .table-section {
   margin-top: 40px;
   background: #ffffff;
   padding: 25px;
-  border-radius: 14px;
+  border-radius: 18px;
   box-shadow: 0 4px 14px rgba(255, 150, 200, 0.2);
 }
 
 .table-section h2 {
   color: #ff4f92;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
 }
 
+.hint-text {
+  color: #888;
+  margin-bottom: 20px;
+  font-size: 14px;
+}
+
+/* ===== TABLE ===== */
 table {
   width: 100%;
   border-collapse: collapse;
+  overflow: hidden;
+  border-radius: 14px;
 }
 
 thead {
   background: #ffd6e9;
 }
 
-th, td {
-  padding: 12px;
+th,
+td {
+  padding: 14px 16px;
   text-align: left;
   font-size: 15px;
+}
+
+/* ===== LAST COLUMN ===== */
+table td:last-child,
+table th:last-child {
+  width: 220px;
+  text-align: center;
+}
+
+/* ===== ROW HOVER ===== */
+tbody tr {
+  transition: 0.2s;
 }
 
 tbody tr:hover {
   background: #fff0f6;
 }
 
+/* ===== STATUS ===== */
 .status {
-  padding: 5px 12px;
-  border-radius: 8px;
+  padding: 6px 14px;
+  border-radius: 999px;
   color: white;
   text-transform: capitalize;
+  font-size: 13px;
+  font-weight: 600;
+  display: inline-block;
 }
 
 .approved {
@@ -113,4 +165,70 @@ tbody tr:hover {
 
 .rejected {
   background: #e63946;
+}
+
+/* ===== CABUT APPROVAL BUTTON ===== */
+.revoke-btn {
+  border: none;
+  outline: none;
+
+  background: linear-gradient(
+    135deg,
+    #ff8fbc,
+    #ff6fa7
+  );
+
+  color: white;
+
+  padding: 10px 18px;
+
+  border-radius: 999px;
+
+  font-family: "Gelasio", serif;
+  font-size: 13px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: all 0.25s ease;
+
+  box-shadow: 0 4px 12px rgba(255, 111, 167, 0.25);
+
+  white-space: nowrap;
+}
+
+.revoke-btn:hover {
+  transform: translateY(-1px);
+
+  background: linear-gradient(
+    135deg,
+    #ff7ab1,
+    #ff4f95
+  );
+
+  box-shadow: 0 6px 16px rgba(255, 111, 167, 0.35);
+}
+
+.revoke-btn:active {
+  transform: scale(0.97);
+}
+
+/* ===== WAITING TEXT ===== */
+.waiting-text {
+  color: #999;
+  font-size: 13px;
+  font-style: italic;
+}
+
+/* ===== REJECTED TEXT ===== */
+.rejected-text {
+  color: #ff5c7a;
+  font-size: 13px;
+  font-style: italic;
+  font-weight: 600;
+}
+
+/* ===== CLICKABLE ROW ===== */
+.clickable-row {
+  cursor: pointer;
 }

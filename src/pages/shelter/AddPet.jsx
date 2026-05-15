@@ -25,15 +25,24 @@ export default function AddPet() {
     setTimeout(() => setToast(false), 2000);
   }
 
+  // ✅ FORMAT RUPIAH
   function formatRupiah(value) {
     if (!value) return "";
     return "Rp " + value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
   }
 
+  // ✅ HARGA HANYA ANGKA
   function handleHargaChange(e) {
     const raw = e.target.value.replace(/[^0-9]/g, "");
+
     setHarga(raw);
     setHargaDisplay(formatRupiah(raw));
+  }
+
+  // ✅ UMUR HANYA ANGKA
+  function handleUmurChange(e) {
+    const raw = e.target.value.replace(/[^0-9]/g, "");
+    setUmur(raw);
   }
 
   async function uploadFile() {
@@ -43,6 +52,7 @@ export default function AddPet() {
     }
 
     const fileName = `${Date.now()}-${file.name}`;
+
     const { error } = await supabase.storage
       .from("pet-images")
       .upload(fileName, file);
@@ -60,8 +70,15 @@ export default function AddPet() {
   async function save(e) {
     e.preventDefault();
 
-    // ✅ VALIDASI FORM
-    if (!nama || !jenis || !umur || !harga || !deskripsi) {
+    // ✅ VALIDASI
+    if (
+      !nama ||
+      !jenis ||
+      !jenisKelamin ||
+      !umur ||
+      !harga ||
+      !deskripsi
+    ) {
       showToast("⚠️ Lengkapi semua data yaa");
       return;
     }
@@ -69,12 +86,14 @@ export default function AddPet() {
     setLoading(true);
 
     const foto = await uploadFile();
+
     if (!foto) {
       setLoading(false);
       return;
     }
 
     const shelterId = localStorage.getItem("shelter_id");
+
     if (!shelterId) {
       showToast("❌ Shelter belum login");
       setLoading(false);
@@ -88,19 +107,21 @@ export default function AddPet() {
       umur: Number(umur),
       umur_unit: umurUnit,
       deskripsi,
-      harga,
+      harga: Number(harga),
       foto_url: foto,
       status_approval: "pending",
       id_shelter: shelterId,
     });
 
     if (error) {
+      console.error(error);
       showToast("❌ Gagal menyimpan data");
       setLoading(false);
       return;
     }
 
     showToast("✅ Hewan berhasil ditambahkan!");
+
     setTimeout(() => {
       window.location.href = "/shelter/dashboard";
     }, 2000);
@@ -115,18 +136,33 @@ export default function AddPet() {
         <h1 className="title">Tambah Hewan</h1>
 
         <form onSubmit={save} className="form-grid">
-          <input placeholder="Nama hewan" onChange={(e) => setNama(e.target.value)} />
-          <input placeholder="Jenis / Breed" onChange={(e) => setJenis(e.target.value)} />
 
+          {/* NAMA */}
+          <input
+            placeholder="Nama hewan"
+            value={nama}
+            onChange={(e) => setNama(e.target.value)}
+          />
+
+          {/* JENIS */}
+          <input
+            placeholder="Jenis / Breed"
+            value={jenis}
+            onChange={(e) => setJenis(e.target.value)}
+          />
+
+          {/* UMUR */}
           <div className="age-group">
             <input
               className="age-input"
               placeholder="Umur"
-              onChange={(e) => setUmur(e.target.value)}
+              value={umur}
+              onChange={handleUmurChange}
             />
 
             <select
               className="age-unit"
+              value={umurUnit}
               onChange={(e) => setUmurUnit(e.target.value)}
             >
               <option value="bulan">Bulan</option>
@@ -134,18 +170,24 @@ export default function AddPet() {
             </select>
           </div>
 
-          <input
-            placeholder="Jenis Kelamin"
+          {/* ✅ DROPDOWN JENIS KELAMIN */}
+          <select
+            value={jenisKelamin}
             onChange={(e) => setJenisKelamin(e.target.value)}
-          />
+          >
+            <option value="">Pilih Jenis Kelamin</option>
+            <option value="Jantan">Jantan</option>
+            <option value="Betina">Betina</option>
+          </select>
 
+          {/* ✅ HARGA HANYA ANGKA */}
           <input
             placeholder="Harga"
             value={hargaDisplay}
             onChange={handleHargaChange}
           />
 
-          {/* ✅ FILE UPLOAD */}
+          {/* FILE */}
           <label className="file-upload-wrapper">
             <span className="file-upload-label">
               📸 {file ? "Ganti Foto Hewan" : "Upload Foto Hewan"}
@@ -158,17 +200,26 @@ export default function AddPet() {
             />
 
             {file && (
-              <span className="file-upload-name">{file.name}</span>
+              <span className="file-upload-name">
+                {file.name}
+              </span>
             )}
           </label>
 
+          {/* DESKRIPSI */}
           <textarea
             placeholder="Deskripsi"
             className="textarea"
+            value={deskripsi}
             onChange={(e) => setDeskripsi(e.target.value)}
           />
 
-          <button type="submit" className="save-btn" disabled={loading}>
+          {/* BUTTON */}
+          <button
+            type="submit"
+            className="save-btn"
+            disabled={loading}
+          >
             {loading ? "Menyimpan..." : "Simpan"}
           </button>
         </form>

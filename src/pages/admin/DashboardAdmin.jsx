@@ -17,24 +17,25 @@ export default function DashboardAdmin() {
     loadPets();
   }, []);
 
+  // ✅ LOAD STATS
   async function loadStats() {
     const { count: allCount } = await supabase
       .from("pets")
-      .select("*", { count: "exact" });
+      .select("*", { count: "exact", head: true });
 
     const { count: pendingCount } = await supabase
       .from("pets")
-      .select("*", { count: "exact" })
+      .select("*", { count: "exact", head: true })
       .eq("status_approval", "pending");
 
     const { count: approvedCount } = await supabase
       .from("pets")
-      .select("*", { count: "exact" })
+      .select("*", { count: "exact", head: true })
       .eq("status_approval", "approved");
 
     const { count: shelters } = await supabase
       .from("shelters")
-      .select("*", { count: "exact" });
+      .select("*", { count: "exact", head: true });
 
     setTotalPets(allCount || 0);
     setPendingPets(pendingCount || 0);
@@ -42,15 +43,49 @@ export default function DashboardAdmin() {
     setSheltersCount(shelters || 0);
   }
 
+  // ✅ LOAD PETS
   async function loadPets() {
-    const { data } = await supabase
+    const { data, error } = await supabase
       .from("pets")
       .select("*")
       .order("request_date", { ascending: false });
 
+    if (error) {
+      console.error(error);
+      return;
+    }
+
     setPets(data || []);
   }
 
+  // ✅ BATALKAN APPROVAL
+  async function cancelApproval(id) {
+    const confirmAction = window.confirm(
+      "Batalkan approval hewan ini?"
+    );
+
+    if (!confirmAction) return;
+
+    const { error } = await supabase
+      .from("pets")
+      .update({
+        status_approval: "pending",
+      })
+      .eq("id_pet", id);
+
+    if (error) {
+      console.error(error);
+      alert("Gagal mengubah status");
+      return;
+    }
+
+    alert("Status berhasil dikembalikan ke pending!");
+
+    loadPets();
+    loadStats();
+  }
+
+  // ✅ LOGOUT
   function logout() {
     localStorage.removeItem("admin_id");
     window.location.href = "/admin/login";
@@ -58,16 +93,22 @@ export default function DashboardAdmin() {
 
   return (
     <div className="admin-dashboard">
+
       {/* HEADER */}
       <div className="admin-header">
         <h1>Admin Dashboard</h1>
-        <button className="logout-btn" onClick={logout}>
+
+        <button
+          className="logout-btn"
+          onClick={logout}
+        >
           Logout
         </button>
       </div>
 
       {/* STAT CARDS */}
       <div className="stats-grid">
+
         <div className="stat-card">
           <h3>Total Hewan</h3>
           <h1>{totalPets}</h1>
@@ -96,6 +137,7 @@ export default function DashboardAdmin() {
       {/* TABLE */}
       <div className="table-section">
         <h2>Data Hewan</h2>
+
         <p className="hint-text">
           Klik data berstatus <b>pending</b> untuk melakukan verifikasi
         </p>
@@ -107,6 +149,7 @@ export default function DashboardAdmin() {
               <th>Status</th>
               <th>Jenis</th>
               <th>Umur</th>
+              <th>Approval</th>
             </tr>
           </thead>
 
@@ -126,14 +169,40 @@ export default function DashboardAdmin() {
                 }}
               >
                 <td>{p.nama_hewan}</td>
+
                 <td>
                   <span className={`status ${p.status_approval}`}>
                     {p.status_approval}
                   </span>
                 </td>
+
                 <td>{p.jenis}</td>
+
                 <td>
                   {p.umur} {p.umur_unit}
+                </td>
+
+                {/* ✅ ACTION */}
+                <td>
+{p.status_approval === "approved" ? (
+  <button
+    className="revoke-btn"
+    onClick={(e) => {
+      e.stopPropagation();
+      cancelApproval(p.id_pet);
+    }}
+  >
+    Cabut Approval
+  </button>
+) : p.status_approval === "rejected" ? (
+  <span className="rejected-text">
+    Ditolak
+  </span>
+) : (
+  <span className="waiting-text">
+    Menunggu Approval
+  </span>
+)}
                 </td>
               </tr>
             ))}
